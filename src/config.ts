@@ -5,9 +5,9 @@ export const TONFUN_CONFIG = {
   // API endpoint для BCL клиента
   BCL_API_ENDPOINT: "https://api.ton.fun",
   
-  // Адрес мастер-контракта BCL (нужно заменить на реальный)
+  // Адрес мастер-контракта BCL (Mainnet)
   // Это адрес контракта, который управляет созданием токенов
-  MASTER_ADDRESS: "EQD4FPq-PRDieyQKkO5Fm8Tnsg6p4qN1kP5J5N5J5N5J5N5J5N",
+  MASTER_ADDRESS: "EQBSMwczMFUb789uqNvebKBvemkRaAQJdzTFq6565Ef9rW2k",
   
   // TonAPI endpoint
   TONAPI_ENDPOINT: "https://tonapi.io",
