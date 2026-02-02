@@ -13,7 +13,7 @@ export const TONFUN_CONFIG = {
   TONAPI_ENDPOINT: "https://tonapi.io",
   
   // TonConnect манифест
-  TONCONNECT_MANIFEST_URL: (typeof window !== 'undefined' ? window.location.origin : 'https://mmpad2.vercel.app') + "/tonconnect-manifest.json",
+  TONCONNECT_MANIFEST_URL: "https://mmpad2.vercel.app/tonconnect-manifest.json",
 };
 
 // Вспомогательная функция для парсинга адреса
