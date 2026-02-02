@@ -40,7 +40,16 @@ export function TokenDetails() {
 
     try {
       setLoading(true);
-      const tokenAddr = Address.parse(tokenAddress);
+      // Парсим адрес, поддерживая разные форматы
+      let tokenAddr: Address;
+      try {
+        tokenAddr = Address.parse(tokenAddress);
+      } catch (e) {
+        // Если не удалось распарсить, пробуем decodeURIComponent
+        const decoded = decodeURIComponent(tokenAddress);
+        tokenAddr = Address.parse(decoded);
+      }
+      
       const coinData = await sdk.api.fetchCoin(tokenAddr);
       setCoin(coinData);
 
