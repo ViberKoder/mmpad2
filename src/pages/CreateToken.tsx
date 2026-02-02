@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSDK } from '../contexts/SDKContext';
-import { useTonConnect } from '../contexts/TonConnectContext';
 import { useTonConnectUI } from '@tonconnect/ui-react';
 import { Address } from '@ton/core';
 import { tonConnectSender } from 'ton-bcl-sdk';
@@ -10,7 +9,6 @@ import './CreateToken.css';
 export function CreateToken() {
   const navigate = useNavigate();
   const { sdk } = useSDK();
-  const { connected, address } = useTonConnect();
   const [tonConnectUI] = useTonConnectUI();
 
   const [formData, setFormData] = useState({
@@ -32,7 +30,9 @@ export function CreateToken() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!connected || !address || !sdk) {
+    // Проверяем подключение через tonConnectUI напрямую
+    const account = tonConnectUI?.account;
+    if (!account || !account.address || !sdk) {
       setError('Please connect your wallet first');
       return;
     }
@@ -46,7 +46,7 @@ export function CreateToken() {
       setLoading(true);
       setError(null);
 
-      const userAddress = Address.parse(address);
+      const userAddress = Address.parse(account.address);
       const socialLinksArray = formData.socialLinks
         ? formData.socialLinks.split(',').map(s => s.trim()).filter(Boolean)
         : [];
@@ -76,7 +76,9 @@ export function CreateToken() {
     }
   };
 
-  if (!connected) {
+  // Проверяем подключение через tonConnectUI напрямую
+  const account = tonConnectUI?.account;
+  if (!account || !account.address) {
     return (
       <div className="create-token">
         <div className="connect-prompt">

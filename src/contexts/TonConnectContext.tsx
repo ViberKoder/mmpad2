@@ -25,13 +25,21 @@ function TonConnectInnerProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (tonConnectUI) {
+      // Проверяем начальное состояние
       const account = tonConnectUI.account;
       setConnected(!!account);
       setAddress(account?.address || null);
 
+      // Подписываемся на изменения статуса
       const unsubscribe = tonConnectUI.onStatusChange((wallet: any) => {
-        setConnected(!!wallet);
-        setAddress(wallet?.account?.address || null);
+        if (wallet) {
+          const account = wallet.account;
+          setConnected(!!account);
+          setAddress(account?.address || null);
+        } else {
+          setConnected(false);
+          setAddress(null);
+        }
       });
 
       return () => unsubscribe();
