@@ -31,6 +31,7 @@ export function Home() {
   return (
     <div className="home">
       <div className="home-hero">
+        <h1 style={{ color: '#000', fontSize: '4rem', fontWeight: 'bold', marginBottom: '1rem' }}>MMPAD</h1>
         <h2>Create and Launch Your Token on TON</h2>
         <p>Deploy your token with bonding curve liquidity in minutes</p>
         <Link to="/create" className="btn-primary">
