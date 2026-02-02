@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Api } from 'tonapi-sdk-js';
+import { Api, HttpClient } from 'tonapi-sdk-js';
 import { Address } from '@ton/core';
 import { BclSDK } from 'ton-bcl-sdk';
 import { simpleTonapiProvider } from 'ton-bcl-sdk';
@@ -20,12 +20,18 @@ export function SDKProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      // Инициализация TonAPI
-      // TonAPI SDK требует HttpClient, но мы можем использовать простую инициализацию
-      // Для production добавьте API ключ через переменные окружения
-      const api = new Api({
+      // Инициализация TonAPI с HttpClient
+      const httpClient = new HttpClient({
         baseUrl: TONFUN_CONFIG.TONAPI_ENDPOINT,
-      } as any);
+        // Если нужен API ключ, добавьте его здесь:
+        // baseApiParams: {
+        //   headers: {
+        //     Authorization: `Bearer ${process.env.VITE_TONAPI_KEY}`
+        //   }
+        // }
+      });
+      
+      const api = new Api(httpClient);
 
       // Создание провайдера
       const provider = simpleTonapiProvider(api);
