@@ -5,15 +5,15 @@ import type { Coin } from 'ton-bcl-sdk';
 import './Home.css';
 
 export function Home() {
-  const { sdk } = useSDK();
+  const { sdk, loading: sdkLoading } = useSDK();
   const [coins, setCoins] = useState<Coin[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (sdk) {
+    if (sdk && !sdkLoading) {
       loadCoins();
     }
-  }, [sdk]);
+  }, [sdk, sdkLoading]);
 
   const loadCoins = async () => {
     if (!sdk) return;
@@ -40,8 +40,10 @@ export function Home() {
 
       <div className="coins-section">
         <h3>Recent Tokens</h3>
-        {loading ? (
+        {sdkLoading || loading ? (
           <div className="loading">Loading tokens...</div>
+        ) : !sdk ? (
+          <div className="empty">SDK not initialized. Please refresh the page.</div>
         ) : coins.length === 0 ? (
           <div className="empty">No tokens found</div>
         ) : (

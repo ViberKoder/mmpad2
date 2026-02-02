@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Api } from 'tonapi-sdk-js';
 import { Address } from '@ton/core';
 import { BclSDK } from 'ton-bcl-sdk';
@@ -15,8 +15,10 @@ const SDKContext = createContext<SDKContextType | null>(null);
 
 export function SDKProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
+  const [sdk, setSdk] = useState<BclSDK | null>(null);
+  const [tonapi, setTonapi] = useState<Api<any> | null>(null);
 
-  const { sdk, tonapi } = useMemo(() => {
+  useEffect(() => {
     try {
       // Инициализация TonAPI
       // TonAPI SDK требует HttpClient, но мы можем использовать простую инициализацию
@@ -37,15 +39,15 @@ export function SDKProvider({ children }: { children: React.ReactNode }) {
         masterAddress: Address.parse(TONFUN_CONFIG.MASTER_ADDRESS),
       });
 
-      return { sdk: bclSDK, tonapi: api };
+      setSdk(bclSDK);
+      setTonapi(api);
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
-      return { sdk: null, tonapi: null };
+      setSdk(null);
+      setTonapi(null);
+    } finally {
+      setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    setLoading(false);
   }, []);
 
   return (

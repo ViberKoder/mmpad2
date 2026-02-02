@@ -11,7 +11,7 @@ function App() {
   return (
     <TonConnectProvider>
       <SDKProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/">
           <div className="app">
             <Header />
             <main className="main-content">
