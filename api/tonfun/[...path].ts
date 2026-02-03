@@ -22,6 +22,8 @@ export default async function handler(req: any, res: any) {
   // Формируем URL для api.ton.fun
   const url = `https://api.ton.fun/${pathString}${queryString}`;
   
+  console.log(`[Proxy] ${req.method} ${url}`);
+  
   try {
     // Копируем заголовки запроса (кроме host и connection)
     const headers: Record<string, string> = {};

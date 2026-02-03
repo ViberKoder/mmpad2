@@ -4,9 +4,15 @@ import { Address } from "@ton/core";
 export const TONFUN_CONFIG = {
   // API endpoint для BCL клиента
   // Используем прокси через Vercel для обхода CORS
-  BCL_API_ENDPOINT: typeof window !== 'undefined' 
-    ? `${window.location.origin}/api/tonfun`
-    : "https://api.ton.fun",
+  BCL_API_ENDPOINT: (() => {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      const endpoint = `${origin}/api/tonfun`;
+      console.log('[Config] BCL_API_ENDPOINT:', endpoint);
+      return endpoint;
+    }
+    return "https://api.ton.fun";
+  })(),
   
   // Адрес мастер-контракта BCL (Mainnet)
   // Это адрес контракта, который управляет созданием токенов
