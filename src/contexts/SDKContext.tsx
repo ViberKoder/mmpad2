@@ -36,19 +36,25 @@ export function SDKProvider({ children }: { children: React.ReactNode }) {
       // Создание провайдера
       const provider = simpleTonapiProvider(api);
 
+      // Получаем endpoint для BCL API
+      const bclEndpoint = TONFUN_CONFIG.BCL_API_ENDPOINT;
+      console.log('[SDKContext] Initializing SDK with BCL endpoint:', bclEndpoint);
+      console.log('[SDKContext] Master address:', TONFUN_CONFIG.MASTER_ADDRESS);
+
       // Создание SDK
       const bclSDK = BclSDK.create({
         apiProvider: provider,
         clientOptions: {
-          endpoint: TONFUN_CONFIG.BCL_API_ENDPOINT,
+          endpoint: bclEndpoint,
         },
         masterAddress: Address.parse(TONFUN_CONFIG.MASTER_ADDRESS),
       });
 
       setSdk(bclSDK);
       setTonapi(api);
+      console.log('[SDKContext] SDK initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize SDK:', error);
+      console.error('[SDKContext] Failed to initialize SDK:', error);
       setSdk(null);
       setTonapi(null);
     } finally {

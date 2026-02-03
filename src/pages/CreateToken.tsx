@@ -55,6 +55,12 @@ export function CreateToken() {
       const sender = tonConnectSender(tonConnectUI!);
 
       // Деплоим токен
+      console.log('[CreateToken] Deploying coin with params:', {
+        name: formData.name,
+        symbol: formData.symbol,
+        authorAddress: userAddress.toString(),
+      });
+      
       await sdk.deployCoin(sender, {
         authorAddress: userAddress,
         name: formData.name,
@@ -65,6 +71,8 @@ export function CreateToken() {
         referral: null,
         extraMetadata: {},
       });
+      
+      console.log('[CreateToken] Coin deployed successfully');
 
       // После успешного деплоя переходим на главную
       navigate('/');
