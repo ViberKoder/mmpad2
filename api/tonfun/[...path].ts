@@ -57,13 +57,21 @@ export default async function handler(req: any, res: any) {
     try {
       if (contentType.includes('application/json')) {
         const jsonData = await response.json();
-        data = JSON.stringify(jsonData || {});
+        // Убеждаемся, что данные не null/undefined
+        if (jsonData === null || jsonData === undefined) {
+          console.warn('[Proxy] Received null/undefined JSON response, returning empty object');
+          data = JSON.stringify({});
+        } else {
+          data = JSON.stringify(jsonData);
+        }
       } else {
-        data = await response.text() || '';
+        const textData = await response.text();
+        data = textData || '';
       }
     } catch (parseError: any) {
       console.error('[Proxy] Error parsing response:', parseError);
-      data = '';
+      // Возвращаем пустой объект вместо null
+      data = JSON.stringify({ error: 'Failed to parse response', details: parseError.message });
     }
     
     // Копируем заголовки ответа (кроме CORS заголовков)
