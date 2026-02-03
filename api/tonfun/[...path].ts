@@ -51,17 +51,31 @@ export default async function handler(req: any, res: any) {
     });
     
     // Получаем данные
-    const data = await response.text();
+    let data: string;
+    const contentType = response.headers.get('content-type') || '';
     
-    // Копируем заголовки ответа
+    if (contentType.includes('application/json')) {
+      data = await response.json();
+      data = JSON.stringify(data);
+    } else {
+      data = await response.text();
+    }
+    
+    // Копируем заголовки ответа (кроме CORS заголовков)
     response.headers.forEach((value, key) => {
-      res.setHeader(key, value);
+      const lowerKey = key.toLowerCase();
+      if (lowerKey !== 'access-control-allow-origin' && 
+          lowerKey !== 'access-control-allow-methods' &&
+          lowerKey !== 'access-control-allow-headers') {
+        res.setHeader(key, value);
+      }
     });
     
     // Устанавливаем CORS заголовки
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Expose-Headers', '*');
     
     // Отправляем ответ
     res.status(response.status).send(data);
