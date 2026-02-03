@@ -20,13 +20,9 @@ export default async function handler(req: any, res: any) {
     : '';
   
   // Формируем URL для api.ton.fun
-  // Убираем двойные слеши
-  const cleanPath = pathString.replace(/^\/+|\/+$/g, '');
-  const url = `https://api.ton.fun/${cleanPath}${queryString}`;
+  const url = `https://api.ton.fun/${pathString}${queryString}`;
   
   console.log(`[Proxy] ${req.method} ${url}`);
-  console.log(`[Proxy] Original path:`, pathString);
-  console.log(`[Proxy] Query string:`, queryString);
   
   try {
     // Копируем заголовки запроса (кроме host и connection)
@@ -84,8 +80,22 @@ export default async function handler(req: any, res: any) {
     // Отправляем ответ
     res.status(response.status).send(data);
   } catch (error: any) {
-    console.error('Proxy error:', error);
+    console.error('[Proxy] Error:', error);
+    console.error('[Proxy] Error stack:', error.stack);
+    console.error('[Proxy] Request URL:', url);
+    console.error('[Proxy] Request method:', req.method);
+    
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.status(500).json({ error: error.message });
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    const errorMessage = error.message || 'Unknown error';
+    const errorResponse = {
+      error: errorMessage,
+      url: url,
+      method: req.method,
+    };
+    
+    res.status(500).json(errorResponse);
   }
 }

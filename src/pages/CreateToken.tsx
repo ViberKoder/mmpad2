@@ -77,8 +77,23 @@ export function CreateToken() {
       // После успешного деплоя переходим на главную
       navigate('/');
     } catch (err: any) {
-      console.error('Failed to create token:', err);
-      setError(err.message || 'Failed to create token. Please try again.');
+      console.error('[CreateToken] Failed to create token:', err);
+      console.error('[CreateToken] Error details:', {
+        message: err.message,
+        stack: err.stack,
+        cause: err.cause,
+        name: err.name,
+      });
+      
+      // Более детальное сообщение об ошибке
+      let errorMessage = 'Failed to create token. Please try again.';
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.cause?.message) {
+        errorMessage = err.cause.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
