@@ -7,7 +7,9 @@ export const TONFUN_CONFIG = {
   
   // Адрес мастер-контракта BCL (Mainnet)
   // Это адрес контракта, который управляет созданием токенов
-  MASTER_ADDRESS: "UQCYEPeADv6F9S9orOHA1OX7y0z4D-b43cEZ-71aN2EB3Am3", // Ваш кастомный контракт с fullPriceTon=300 TON
+  // ВАЖНО: Это должен быть мастер-контракт (factory) с методом get_factory_data, а не сам BCL контракт
+  // Используем формат 0:hash для совместимости с TonAPI
+  MASTER_ADDRESS: "0:f3d795d30806c4b2149d895f084c95e01ab6162a33e51083d556034fb5c18263", // Новый мастер-контракт с параметрами: 300 TON, ваш fee_address
   
   // TonAPI endpoint
   TONAPI_ENDPOINT: "https://tonapi.io",
