@@ -54,11 +54,16 @@ export default async function handler(req: any, res: any) {
     let data: string;
     const contentType = response.headers.get('content-type') || '';
     
-    if (contentType.includes('application/json')) {
-      data = await response.json();
-      data = JSON.stringify(data);
-    } else {
-      data = await response.text();
+    try {
+      if (contentType.includes('application/json')) {
+        const jsonData = await response.json();
+        data = JSON.stringify(jsonData || {});
+      } else {
+        data = await response.text() || '';
+      }
+    } catch (parseError: any) {
+      console.error('[TonAPI Proxy] Error parsing response:', parseError);
+      data = '';
     }
     
     // Копируем заголовки ответа (кроме CORS заголовков)
