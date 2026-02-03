@@ -17,4 +17,19 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  server: {
+    proxy: {
+      '/api/tonfun': {
+        target: 'https://api.ton.fun',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/tonfun/, ''),
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            // Удаляем host заголовок
+            proxyReq.removeHeader('host');
+          });
+        },
+      },
+    },
+  },
 })
