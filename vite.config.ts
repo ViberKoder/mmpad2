@@ -23,8 +23,8 @@ export default defineConfig({
         target: 'https://api.ton.fun',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/tonfun/, ''),
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
             // Удаляем host заголовок
             proxyReq.removeHeader('host');
           });
