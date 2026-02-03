@@ -30,6 +30,17 @@ export default defineConfig({
           });
         },
       },
+      '/api/tonapi': {
+        target: 'https://tonapi.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/tonapi/, ''),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            // Удаляем host заголовок
+            proxyReq.removeHeader('host');
+          });
+        },
+      },
     },
   },
 })

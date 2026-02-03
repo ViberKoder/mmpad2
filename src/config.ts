@@ -4,13 +4,10 @@ import { Address } from "@ton/core";
 export const TONFUN_CONFIG = {
   // API endpoint для BCL клиента
   // Используем прокси через Vercel для обхода CORS
-  // ВАЖНО: endpoint должен быть без trailing slash и без пути после домена
   BCL_API_ENDPOINT: (() => {
     if (typeof window !== 'undefined') {
       const origin = window.location.origin;
-      // Убираем trailing slash если есть
-      const cleanOrigin = origin.replace(/\/$/, '');
-      const endpoint = `${cleanOrigin}/api/tonfun`;
+      const endpoint = `${origin}/api/tonfun`;
       console.log('[Config] BCL_API_ENDPOINT:', endpoint);
       return endpoint;
     }
@@ -24,7 +21,16 @@ export const TONFUN_CONFIG = {
   MASTER_ADDRESS: "0:f3d795d30806c4b2149d895f084c95e01ab6162a33e51083d556034fb5c18263", // Новый мастер-контракт с параметрами: 300 TON, ваш fee_address
   
   // TonAPI endpoint
-  TONAPI_ENDPOINT: "https://tonapi.io",
+  // Используем прокси через Vercel для обхода CORS
+  TONAPI_ENDPOINT: (() => {
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      const endpoint = `${origin}/api/tonapi`;
+      console.log('[Config] TONAPI_ENDPOINT:', endpoint);
+      return endpoint;
+    }
+    return "https://tonapi.io";
+  })(),
   
   // TonConnect манифест
   TONCONNECT_MANIFEST_URL: "https://mmpad2.vercel.app/tonconnect-manifest.json",
