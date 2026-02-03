@@ -4,10 +4,13 @@ import { Address } from "@ton/core";
 export const TONFUN_CONFIG = {
   // API endpoint для BCL клиента
   // Используем прокси через Vercel для обхода CORS
+  // ВАЖНО: endpoint должен быть без trailing slash и без пути после домена
   BCL_API_ENDPOINT: (() => {
     if (typeof window !== 'undefined') {
       const origin = window.location.origin;
-      const endpoint = `${origin}/api/tonfun`;
+      // Убираем trailing slash если есть
+      const cleanOrigin = origin.replace(/\/$/, '');
+      const endpoint = `${cleanOrigin}/api/tonfun`;
       console.log('[Config] BCL_API_ENDPOINT:', endpoint);
       return endpoint;
     }

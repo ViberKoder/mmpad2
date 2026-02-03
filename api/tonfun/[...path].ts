@@ -20,9 +20,13 @@ export default async function handler(req: any, res: any) {
     : '';
   
   // Формируем URL для api.ton.fun
-  const url = `https://api.ton.fun/${pathString}${queryString}`;
+  // Убираем двойные слеши
+  const cleanPath = pathString.replace(/^\/+|\/+$/g, '');
+  const url = `https://api.ton.fun/${cleanPath}${queryString}`;
   
   console.log(`[Proxy] ${req.method} ${url}`);
+  console.log(`[Proxy] Original path:`, pathString);
+  console.log(`[Proxy] Query string:`, queryString);
   
   try {
     // Копируем заголовки запроса (кроме host и connection)
